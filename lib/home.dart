@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
@@ -33,13 +34,13 @@ class Home extends StatelessWidget {
               ),
             ),
           ),
-          header(),
+          body_page(context),
         ],
       ),
     );
   }
 
-  SafeArea header() {
+  body_page(BuildContext contex) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -126,23 +127,43 @@ class Home extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                height: 40,
-                width: double.infinity,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
+              menu_options_list(),
+              const SizedBox(height: 15),
+              list_details_card_options_menu(),
+              const SizedBox(height: 25),
+              SizedBox(
+                height: 170,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    card_options(
-                        Icone: CupertinoIcons.folder_open, Title: "All"),
-                    card_options(
-                        Icone: CupertinoIcons.folder_open, Title: "Pizza"),
-                    card_options(
-                        Icone: CupertinoIcons.folder_open, Title: "Bureger"),
-                    card_options(
-                        Icone: CupertinoIcons.folder_open, Title: "Dinks"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text(
+                          "Recommended",
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
+                        Text(
+                          "See All",
+                          style: TextStyle(fontSize: 12, color: Colors.white54),
+                        ),
+                      ],
+                    ),
+                    const Text(
+                      "20+ Pizza",
+                      style: TextStyle(fontSize: 12, color: Colors.white54),
+                    ),
+                    details_card_recommended(
+                        context: contex,
+                        Img: "assets/01.png",
+                        Item: "Peperone Pizza",
+                        subItem: "Molho Especial",
+                        price: "7,40",
+                        Icone: CupertinoIcons.cart),
                   ],
                 ),
-              ),
+              )
             ],
           ),
         ),
@@ -150,7 +171,133 @@ class Home extends StatelessWidget {
     );
   }
 
-  Container card_options({required IconData Icone, required String Title}) {
+  details_card_recommended(
+      {required String Img,
+      required String Item,
+      required String subItem,
+      required String price,
+      required IconData Icone,
+      required BuildContext context}) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      height: 100,
+      width: 400,
+      child: Row(
+        children: [
+          SizedBox(
+            width: 100,
+            height: 100,
+            child: Image.asset(
+              "assets/02.png",
+              fit: BoxFit.fill,
+            ),
+          ),
+          Stack(
+            children: [
+              ClipPath(
+                clipper: CustomClipPath(),
+                child: Container(
+                  width: 215,
+                  height: 100,
+                  color: Colors.black54,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          Item,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          subItem,
+                          style: const TextStyle(
+                              color: Colors.white12,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Container(
+                          height: 20,
+                          child: Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  Text(
+                                    "R\$",
+                                    style: TextStyle(
+                                        color: Colors.pink, fontSize: 10),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                price,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    print("Tocou");
+                  },
+                  child: Container(
+                    width: 35,
+                    height: 35,
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(10),
+                        topLeft: Radius.circular(10),
+                      ),
+                    ),
+                    child: Icon(
+                      Icone,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  menu_options_list() {
+    return Container(
+      height: 40,
+      width: double.infinity,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          card_options(Icone: CupertinoIcons.folder_open, Title: "All"),
+          card_options(Icone: CupertinoIcons.folder_open, Title: "Pizza"),
+          card_options(Icone: CupertinoIcons.folder_open, Title: "Bureger"),
+          card_options(Icone: CupertinoIcons.folder_open, Title: "Dinks"),
+        ],
+      ),
+    );
+  }
+
+  card_options({required IconData Icone, required String Title}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5),
       height: 35,
@@ -167,5 +314,157 @@ class Home extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  details_card_options_menu(
+      {required String Img,
+      required String Item,
+      required String subItem,
+      required String price,
+      required IconData Icone}) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      width: 140,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 50,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              width: 140,
+              height: 180,
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    Item,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    subItem,
+                    style: const TextStyle(
+                        color: Colors.white12,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Container(
+                    height: 20,
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "R\$",
+                              style:
+                                  TextStyle(color: Colors.pink, fontSize: 10),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          price,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            left: 15,
+            right: 15,
+            top: 5,
+            child: SizedBox(
+              width: 90,
+              height: 90,
+              child: Image.asset(
+                "assets/02.png",
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: GestureDetector(
+              onTap: () {
+                print("Tocou");
+              },
+              child: Container(
+                width: 35,
+                height: 35,
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(10),
+                    topLeft: Radius.circular(10),
+                  ),
+                ),
+                child: Icon(
+                  Icone,
+                  size: 20,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  list_details_card_options_menu() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      height: 230,
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 5,
+          itemBuilder: (c, i) => details_card_options_menu(
+              Img: "assets/01.png",
+              Item: "Peperone Pizza",
+              subItem: "Molho Especial",
+              price: "7,40",
+              Icone: CupertinoIcons.cart)),
+    );
+  }
+}
+
+class CustomClipPath extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path0 = Path();
+    path0.moveTo(size.width * 0.0383333, size.height * 0.5000000);
+    path0.quadraticBezierTo(
+        size.width * 0.0371000, size.height * 0.2771000, 0, 0);
+    path0.lineTo(size.width, 0);
+    path0.lineTo(size.width, size.height);
+    path0.lineTo(0, size.height);
+    path0.quadraticBezierTo(size.width * 0.0378667, size.height * 0.7276000,
+        size.width * 0.0383333, size.height * 0.5000000);
+    path0.close();
+
+    return path0;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return false;
   }
 }

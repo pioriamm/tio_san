@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'detals_order-product.dart';
+
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -35,6 +37,48 @@ class Home extends StatelessWidget {
             ),
           ),
           body_page(context),
+          Positioned(
+            bottom: 45,
+            left: 10,
+            right: 10,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: SizedBox(
+                height: 70,
+                width: double.infinity,
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: 10.0,
+                    sigmaY: 10.0,
+                  ),
+                  child: Container(
+                    color: Colors.white10.withOpacity(0.2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: const [
+                        Icon(
+                          CupertinoIcons.home,
+                          color: Colors.white70,
+                        ),
+                        Icon(
+                          CupertinoIcons.location_solid,
+                          color: Colors.white70,
+                        ),
+                        Icon(
+                          CupertinoIcons.bag,
+                          color: Colors.white70,
+                        ),
+                        Icon(
+                          CupertinoIcons.person,
+                          color: Colors.white70,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -129,7 +173,7 @@ class Home extends StatelessWidget {
               ),
               menu_options_list(),
               const SizedBox(height: 15),
-              list_details_card_options_menu(),
+              list_details_card_options_menu(context: contex),
               const SizedBox(height: 25),
               SizedBox(
                 height: 170,
@@ -184,9 +228,20 @@ class Home extends StatelessWidget {
       width: 400,
       child: Row(
         children: [
-          SizedBox(
+          Container(
             width: 100,
             height: 100,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.white30.withOpacity(0.2),
+                  spreadRadius: 0,
+                  blurRadius: 10,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
             child: Image.asset(
               "assets/02.png",
               fit: BoxFit.fill,
@@ -253,9 +308,10 @@ class Home extends StatelessWidget {
                 right: 0,
                 bottom: 0,
                 child: GestureDetector(
-                  onTap: () {
-                    print("Tocou");
-                  },
+                  onTap: () => Navigator.of(context).push(
+                    CupertinoPageRoute(
+                        builder: (context) => DetalsOrderPoduts()),
+                  ),
                   child: Container(
                     width: 35,
                     height: 35,
@@ -297,7 +353,10 @@ class Home extends StatelessWidget {
     );
   }
 
-  card_options({required IconData Icone, required String Title}) {
+  card_options({
+    required IconData Icone,
+    required String Title,
+  }) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5),
       height: 35,
@@ -321,11 +380,13 @@ class Home extends StatelessWidget {
       required String Item,
       required String subItem,
       required String price,
-      required IconData Icone}) {
+      required IconData Icone,
+      required BuildContext contex}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5),
       width: 140,
       child: Stack(
+        alignment: Alignment.topCenter,
         children: [
           Positioned(
             top: 50,
@@ -386,26 +447,32 @@ class Home extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            left: 15,
-            right: 15,
-            top: 5,
-            child: SizedBox(
-              width: 90,
-              height: 90,
-              child: Image.asset(
-                "assets/02.png",
-                fit: BoxFit.fill,
-              ),
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.white30.withOpacity(0.2),
+                  spreadRadius: 0,
+                  blurRadius: 10,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Image.asset(
+              "assets/02.png",
+              fit: BoxFit.fill,
             ),
           ),
           Positioned(
             right: 0,
             bottom: 0,
             child: GestureDetector(
-              onTap: () {
-                print("Tocou");
-              },
+              onTap: () => Navigator.of(contex).push(
+                CupertinoPageRoute(builder: (context) => DetalsOrderPoduts()),
+              ),
               child: Container(
                 width: 35,
                 height: 35,
@@ -429,7 +496,7 @@ class Home extends StatelessWidget {
     );
   }
 
-  list_details_card_options_menu() {
+  list_details_card_options_menu({required BuildContext context}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5),
       height: 230,
@@ -441,7 +508,8 @@ class Home extends StatelessWidget {
               Item: "Peperone Pizza",
               subItem: "Molho Especial",
               price: "7,40",
-              Icone: CupertinoIcons.cart)),
+              Icone: CupertinoIcons.cart,
+              contex: context)),
     );
   }
 }
